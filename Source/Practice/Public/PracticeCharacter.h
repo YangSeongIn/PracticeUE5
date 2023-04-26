@@ -72,6 +72,8 @@ public:
 
 private:
 	UPROPERTY(EditAnywhere)
+	TSubclassOf<UUserWidget> InventoryWidgetClass;
+	UPROPERTY()
 	UInventory* InventoryWidget;
 };
 

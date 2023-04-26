@@ -23,4 +23,18 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+private:
+	UPROPERTY(Editanywhere)
+	UStaticMeshComponent* MainBody;
+
+protected:
+	UPROPERTY(Editanywhere)
+	uint8 Ammo;
+	uint8 MaxAmmo;
+
+public:
+	FORCEINLINE UStaticMeshComponent* GetMainBody() { return MainBody; };
+	FORCEINLINE void SetMainBody(UStaticMeshComponent* mb) { MainBody = mb; };
+	FORCEINLINE uint8 GetAmmo() { return Ammo; };
+	FORCEINLINE void SetAmmo(uint8 n) { Ammo = n; };
 };

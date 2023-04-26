@@ -129,9 +129,24 @@ void APracticeCharacter::Look(const FInputActionValue& Value)
 
 void APracticeCharacter::Inventory(const FInputActionValue& Value)
 {
-	if (InventoryWidget != nullptr)
+	if (InventoryWidgetClass != nullptr)
 	{
-		//CreateWidget
+		if (InventoryWidget == nullptr)
+		{
+			InventoryWidget = Cast<UInventory>(CreateWidget(GetWorld(), InventoryWidgetClass));
+			if (InventoryWidget != nullptr)
+			{
+				InventoryWidget->AddToViewport();
+			}
+		}
+		else
+		{
+			if (InventoryWidget->IsInViewport())
+			{
+				InventoryWidget->RemoveFromParent();
+				InventoryWidget = nullptr;
+			}
+		}
 	}
 }
 
