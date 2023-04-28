@@ -1,27 +1,27 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Weapon/Master_Weapon.h"
+#include "Weapon/Item_Base.h"
 
 // Sets default values
-AMaster_Weapon::AMaster_Weapon()
+AItem_Base::AItem_Base()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 
-	Ammo = 0;
-	MaxAmmo = Ammo;
+	MainBody = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MainBody"));
+	SetRootComponent(MainBody);
 }
 
 // Called when the game starts or when spawned
-void AMaster_Weapon::BeginPlay()
+void AItem_Base::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
 // Called every frame
-void AMaster_Weapon::Tick(float DeltaTime)
+void AItem_Base::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 

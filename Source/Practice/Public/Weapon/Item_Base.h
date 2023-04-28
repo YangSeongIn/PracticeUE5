@@ -3,17 +3,17 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Weapon/Item_Base.h"
-#include "Master_Weapon.generated.h"
+#include "GameFramework/Actor.h"
+#include "Item_Base.generated.h"
 
 UCLASS()
-class PRACTICE_API AMaster_Weapon : public AItem_Base
+class PRACTICE_API AItem_Base : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AMaster_Weapon();
+	AItem_Base();
 
 protected:
 	// Called when the game starts or when spawned
@@ -24,13 +24,11 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
-
-protected:
 	UPROPERTY(Editanywhere)
-	uint8 Ammo;
-	uint8 MaxAmmo;
+	UStaticMeshComponent* MainBody;
 
 public:
-	FORCEINLINE uint8 GetAmmo() { return Ammo; };
-	FORCEINLINE void SetAmmo(uint8 n) { Ammo = n; };
+	FORCEINLINE UStaticMeshComponent* GetMainBody() { return MainBody; };
+	FORCEINLINE void SetMainBody(UStaticMeshComponent* mb) { MainBody = mb; };
+
 };

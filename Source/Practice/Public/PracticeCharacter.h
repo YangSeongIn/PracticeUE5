@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
+#include "Etc/MyEnum.h"
+
 #include "PracticeCharacter.generated.h"
 
 class UInventory;
@@ -75,5 +77,13 @@ private:
 	TSubclassOf<UUserWidget> InventoryWidgetClass;
 	UPROPERTY()
 	UInventory* InventoryWidget;
+
+	EPlayerState PlayerStateType;
+
+public:
+	FORCEINLINE EPlayerState GetPlayerState() { return PlayerStateType; };
+	FORCEINLINE void SetPlayerState(uint8 i) { PlayerStateType = EPlayerState(i); };
+
+	void SwitchCurrentWeapon(int i);
 };
 

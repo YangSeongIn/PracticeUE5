@@ -66,6 +66,12 @@ void APracticeCharacter::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
+
+	PlayerStateType = EPlayerState::BareHandsMode;
+}
+
+void APracticeCharacter::SwitchCurrentWeapon(int i)
+{
 }
 
 //////////////////////////////////////////////////////////////////////////
