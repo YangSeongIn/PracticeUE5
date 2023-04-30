@@ -9,8 +9,12 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Inventory/InventorySystem.h"
+#include "Kismet/KismetSystemLibrary.h"
+#include "Item/Weapon/Item_Base.h"
+#include "Item/ItemDataComponent.h"
 
-#include "Widget/Inventory.h"
+#include "Inventory/Inventory.h"
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -51,6 +55,8 @@ APracticeCharacter::APracticeCharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+
+	InventorySystem = CreateDefaultSubobject<UInventorySystem>(TEXT("Inventory System"));
 }
 
 void APracticeCharacter::BeginPlay()
@@ -92,7 +98,10 @@ void APracticeCharacter::SetupPlayerInputComponent(class UInputComponent* Player
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &APracticeCharacter::Look);
 		
 		//InventoryWidget
-		EnhancedInputComponent->BindAction(InventoryAction, ETriggerEvent::Triggered, this, &APracticeCharacter::Inventory);
+		EnhancedInputComponent->BindAction(InventoryAction, ETriggerEvent::Triggered, this, &APracticeCharacter::OpenInventory);
+
+		//Interact
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &APracticeCharacter::Interact);
 	}
 
 }
@@ -133,7 +142,7 @@ void APracticeCharacter::Look(const FInputActionValue& Value)
 	}
 }
 
-void APracticeCharacter::Inventory(const FInputActionValue& Value)
+void APracticeCharacter::OpenInventory(const FInputActionValue& Value)
 {
 	if (InventoryWidgetClass != nullptr)
 	{
@@ -156,14 +165,30 @@ void APracticeCharacter::Inventory(const FInputActionValue& Value)
 	}
 }
 
-void APracticeCharacter::Jump(const FInputActionValue& Value)
+void APracticeCharacter::Interact()
 {
-	bPressedJump = true;
-	JumpKeyHoldTime = 0.0f;
+	FVector StartLoc = GetActorLocation();
+	FVector EndLoc = StartLoc + GetActorForwardVector() * 150;
+	TArray<AActor*> ArrToIgnore;
+	FHitResult OutHit;
+	bool b = UKismetSystemLibrary::LineTraceSingle(this, StartLoc, EndLoc, ETraceTypeQuery::TraceTypeQuery1,
+		false, ArrToIgnore, EDrawDebugTrace::Persistent, OutHit, true);
+	if (b)
+	{
+		AItem_Base* Item = Cast<AItem_Base>(OutHit.GetActor());
+		if (Item != nullptr)
+		{
+			Item->GetItemDataComponent()->Interact(this);
+		}
+	}
 }
 
-void APracticeCharacter::StopJumping(const FInputActionValue& Value)
+void APracticeCharacter::Jump()
 {
-	bPressedJump = false;
-	ResetJumpState();
+	Super::Jump();
+}
+
+void APracticeCharacter::StopJumping()
+{
+	Super::StopJumping();
 }
