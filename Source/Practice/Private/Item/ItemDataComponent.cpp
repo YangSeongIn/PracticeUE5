@@ -39,7 +39,12 @@ void UItemDataComponent::Interact(APracticeCharacter* Character)
 	TTuple<bool, int> AddInVentoryTuple = Character->GetInventorySystem()->AddToInventory(ItemID.RowName.ToString(), Quantity);
 	if (AddInVentoryTuple.Get<0>())
 	{
+		GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Blue, FString::Printf(TEXT("Interact")));
 		GetOwner()->Destroy();
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Blue, FString::Printf(TEXT("!!Interact")));
 	}
 }
 

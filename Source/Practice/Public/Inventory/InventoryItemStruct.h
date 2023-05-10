@@ -13,9 +13,9 @@ struct FInventorySlotStruct
 public:
 	GENERATED_USTRUCT_BODY()
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite)
 		FString ItemID;
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite)
 		int Quantity;
 };
 

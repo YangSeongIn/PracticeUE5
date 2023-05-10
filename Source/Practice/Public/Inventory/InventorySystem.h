@@ -27,11 +27,15 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 private:
-	int inventorySize;
-	TArray<FInventorySlotStruct> Contents;
+	int inventorySize = 16;
+	
+	UPROPERTY()
 	UDataTable* InventoryDataTable;
 
 public:
+	UPROPERTY(BlueprintReadWrite)
+	TArray<FInventorySlotStruct> Contents;
+
 	TTuple<bool, int> AddToInventory(FString ItemID, int Quantity);
 	void RemoveFromInventory(FString ItemID, int Quantity);
 	TTuple<int, bool> FindSlot(FString ItemID);
@@ -40,5 +44,7 @@ public:
 	TTuple<bool, int> AnyEmptySlotAvailable();
 	bool CreateNewStack(FString ItemID, int Quantity);
 	UFUNCTION(BlueprintCallable)
-	void DEBUGPrintContents();
+		void DEBUGPrintContents();
+	UFUNCTION(BlueprintCallable)
+	TArray<FInventorySlotStruct> GetContents() { return Contents; };
 };

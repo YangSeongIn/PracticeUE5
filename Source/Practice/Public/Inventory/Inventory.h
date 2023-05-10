@@ -6,12 +6,20 @@
 #include "Blueprint/UserWidget.h"
 #include "Inventory.generated.h"
 
-/**
- * 
- */
+class UInventorySystem;
+class UWrapBox;
+class UInventoryGrid;
+
 UCLASS()
 class PRACTICE_API UInventory : public UUserWidget
 {
 	GENERATED_BODY()
 	
+protected:
+	virtual void NativePreConstruct() override;
+
+public:
+	UPROPERTY(meta = (BindWidget))
+		UInventoryGrid* InventoryGrid;
+
 };

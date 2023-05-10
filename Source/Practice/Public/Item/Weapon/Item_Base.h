@@ -30,7 +30,7 @@ private:
 	UStaticMeshComponent* MainBody;
 
 	UPROPERTY(VisibleAnywhere)
-		UItemDataComponent* ItemDataComponent;
+	UItemDataComponent* ItemDataComponent;
 
 public:
 	FORCEINLINE UStaticMeshComponent* GetMainBody() { return MainBody; };

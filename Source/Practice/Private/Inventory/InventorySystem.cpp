@@ -24,9 +24,12 @@ UInventorySystem::UInventorySystem()
 void UInventorySystem::BeginPlay()
 {
 	Super::BeginPlay();
-
 	// ...
-	
+	for (int i = 0; i < inventorySize; i++) 
+	{
+		FInventorySlotStruct s{"", 0};
+		Contents.Add(s);
+	}
 }
 
 
@@ -122,11 +125,11 @@ void UInventorySystem::AddToStack(int Idx, int Quantity)
 
 TTuple<bool, int> UInventorySystem::AnyEmptySlotAvailable()
 {
-	for (FInventorySlotStruct ItemSlot : Contents)
+	for (int i = 0; i < Contents.Num(); i++)
 	{
-		if (ItemSlot.Quantity == 0) return MakeTuple(false, ItemSlot.Quantity);
+		if (Contents[i].Quantity == 0) return MakeTuple(true, i);
 	}
-	return MakeTuple(true, -1);
+	return MakeTuple(false, -1);
 }
 
 bool UInventorySystem::CreateNewStack(FString ItemID, int Quantity)
@@ -141,6 +144,7 @@ bool UInventorySystem::CreateNewStack(FString ItemID, int Quantity)
 
 void UInventorySystem::DEBUGPrintContents()
 {
+	GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Blue, FString::Printf(TEXT("contents size : %d"), Contents.Num()));
 	for (int i = 0; i < Contents.Num(); i++)
 	{
 		FInventorySlotStruct x = Contents[i];

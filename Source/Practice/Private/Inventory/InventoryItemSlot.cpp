@@ -5,21 +5,62 @@
 #include "Blueprint/WidgetBlueprintLibrary.h"
 #include "Inventory/DragItemVisual.h"
 #include "Inventory/ItemDragDropOperation.h"
+#include "Inventory/InventoryItemStruct.h"
+#include "Engine/DataTable.h"
+#include "Components/Image.h"
+#include "Components/TextBlock.h"
 
 UInventoryItemSlot::UInventoryItemSlot(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
 {
-	static ConstructorHelpers::FClassFinder<UDragDropOperation> DragDropOperationAsset(TEXT("/Script/Engine.Blueprint'/Game/Inventory/BP_DragDropOperation.BP_DragDropOperation'"));
-	if (DragDropOperationAsset.Succeeded())
+	static ConstructorHelpers::FObjectFinder<UDataTable> DataTable(TEXT("/Script/Engine.DataTable'/Game/Inventory/DT_ItemDataTable.DT_ItemDataTable'"));
+	if (DataTable.Succeeded())
 	{
-		DragDropOperationClass = DragDropOperationAsset.Class;
+		InventoryDataTable = DataTable.Object;
 	}
+
+	//ItemID = "";
 }
 
 void UInventoryItemSlot::NativeConstruct()
 {
 	Super::NativeConstruct();
-	
+
+}
+
+void UInventoryItemSlot::NativePreConstruct()
+{
+	Super::NativePreConstruct();
+
+	TArray<FItemStruct*> ItemStructs;
+	InventoryDataTable->GetAllRows<FItemStruct>(ItemID, ItemStructs);
+	for (FItemStruct* ItemStruct : ItemStructs)
+	{
+		if (ItemStruct->ItemName == ItemID)
+		{
+			if (ItemIcon != nullptr)
+			{
+				ItemIcon->SetBrushFromTexture(ItemStruct->Thumbnail);
+				ItemIcon->SetVisibility(ESlateVisibility::Visible);
+				ItemQuantity->SetText(FText::FromString(FString::FromInt(Quantity)));
+				ItemQuantity->SetVisibility(ESlateVisibility::Visible);
+			}
+			else
+			{
+				UE_LOG(LogTemp, Log, TEXT("Icon Null 1"));
+			}
+			return;
+		}
+	}
+	if (ItemIcon != nullptr)
+	{
+		ItemIcon->SetVisibility(ESlateVisibility::Hidden);
+		ItemQuantity->SetVisibility(ESlateVisibility::Hidden);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Log, TEXT("Icon Null 2"));
+	}
 }
 
 void UInventoryItemSlot::NativeOnInitialized()

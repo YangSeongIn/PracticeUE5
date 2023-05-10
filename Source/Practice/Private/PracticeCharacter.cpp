@@ -186,6 +186,7 @@ void APracticeCharacter::Interact()
 void APracticeCharacter::Jump()
 {
 	Super::Jump();
+	InventorySystem->DEBUGPrintContents();
 }
 
 void APracticeCharacter::StopJumping()

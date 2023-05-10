@@ -34,6 +34,7 @@ private:
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FDataTableRowHandle ItemID;
-	void Interact(APracticeCharacter* Character);
+	UFUNCTION()
+		void Interact(APracticeCharacter* Character);
 
 };
