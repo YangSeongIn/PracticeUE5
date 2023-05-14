@@ -179,7 +179,6 @@ void APracticeCharacter::Interact()
 		if (Item != nullptr)
 		{
 			Item->GetItemDataComponent()->Interact(this);
-			Item->GetItemName();
 		}
 	}
 }

@@ -21,7 +21,7 @@ class PRACTICE_API UInventoryItemSlot : public UUserWidget
 	GENERATED_BODY()
 	
 public:
-	UInventoryItemSlot(const FObjectInitializer& ObjectInitializer);
+	// UInventoryItemSlot(const FObjectInitializer& ObjectInitializer);
 
 public:
 	/*UPROPERTY(BlueprintReadOnly, Category = "Drag Item Visual", meta = (BindWidget))
@@ -42,7 +42,7 @@ public:
 		TSubclassOf<UUserWidget> DragItemVisualClass;
 	UPROPERTY()
 		UDragItemVisual* DragItemVisual;
-	UPROPERTY()
+	UPROPERTY(EditAnywhere)
 		UDataTable* InventoryDataTable;
 
 	UPROPERTY(EditAnywhere)
@@ -56,4 +56,8 @@ protected:
 	virtual void NativeOnInitialized() override;
 	virtual FReply NativeOnPreviewMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent);
 	virtual void NativeOnDragDetected(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent, UDragDropOperation*& OutOperation) override;
+
+public:
+	void SetSlot();
+
 };

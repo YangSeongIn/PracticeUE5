@@ -32,10 +32,6 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	UItemDataComponent* ItemDataComponent;
 
-
-public:
-	FName GetItemName();
-
 public:
 	FORCEINLINE UStaticMeshComponent* GetMainBody() { return MainBody; };
 	FORCEINLINE void SetMainBody(UStaticMeshComponent* mb) { MainBody = mb; };

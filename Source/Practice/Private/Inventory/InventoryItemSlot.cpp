@@ -10,57 +10,95 @@
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
 
-UInventoryItemSlot::UInventoryItemSlot(const FObjectInitializer& ObjectInitializer)
-	:Super(ObjectInitializer)
-{
-	static ConstructorHelpers::FObjectFinder<UDataTable> DataTable(TEXT("/Script/Engine.DataTable'/Game/Inventory/DT_ItemDataTable.DT_ItemDataTable'"));
-	if (DataTable.Succeeded())
-	{
-		InventoryDataTable = DataTable.Object;
-	}
-
-	//ItemID = "";
-}
+//UInventoryItemSlot::UInventoryItemSlot(const FObjectInitializer& ObjectInitializer)
+//	:Super(ObjectInitializer)
+//{
+//	//static ConstructorHelpers::FObjectFinder<UDataTable> DataTable(TEXT("/Script/Engine.DataTable'/Game/Inventory/DT_ItemDataTable.DT_ItemDataTable'"));
+//	//if (DataTable.Succeeded())
+//	//{
+//	//	InventoryDataTable = DataTable.Object;
+//	//}
+//
+//	//ItemID = "";
+//}
 
 void UInventoryItemSlot::NativeConstruct()
 {
 	Super::NativeConstruct();
-
+	
 }
 
 void UInventoryItemSlot::NativePreConstruct()
 {
 	Super::NativePreConstruct();
 
-	TArray<FItemStruct*> ItemStructs;
-	InventoryDataTable->GetAllRows<FItemStruct>(ItemID, ItemStructs);
-	for (FItemStruct* ItemStruct : ItemStructs)
-	{
-		if (ItemStruct->ItemName == ItemID)
-		{
-			if (ItemIcon != nullptr)
-			{
-				ItemIcon->SetBrushFromTexture(ItemStruct->Thumbnail);
-				ItemIcon->SetVisibility(ESlateVisibility::Visible);
-				ItemQuantity->SetText(FText::FromString(FString::FromInt(Quantity)));
-				ItemQuantity->SetVisibility(ESlateVisibility::Visible);
-			}
-			else
-			{
-				UE_LOG(LogTemp, Log, TEXT("Icon Null 1"));
-			}
-			return;
-		}
-	}
-	if (ItemIcon != nullptr)
-	{
-		ItemIcon->SetVisibility(ESlateVisibility::Hidden);
-		ItemQuantity->SetVisibility(ESlateVisibility::Hidden);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Log, TEXT("Icon Null 2"));
-	}
+	//static ConstructorHelpers::FObjectFinder<UDataTable> DataTable(TEXT("/Script/Engine.DataTable'/Game/Inventory/DT_ItemDataTable.DT_ItemDataTable'"));
+	//if (DataTable.Succeeded())
+	//{
+	//	InventoryDataTable = DataTable.Object;
+	//}
+
+	//if (InventoryDataTable == nullptr)
+	//{
+	//	UE_LOG(LogTemp, Log, TEXT("Inventory is null"));
+	//}
+	//else
+	//{
+	//	//InventoryDataTable->GetAllRows<FItemStruct>(ItemID, ItemStructs);
+	//	FItemStruct* ItemStruct = InventoryDataTable->FindRow<FItemStruct>(FName(ItemID), "");
+	//	if (ItemStruct != nullptr)
+	//	{
+	//		if (ItemIcon != nullptr)
+	//		{
+	//			ItemIcon->SetBrushFromTexture(ItemStruct->Thumbnail);
+	//			ItemIcon->SetVisibility(ESlateVisibility::Visible);
+	//		}
+	//		else
+	//		{
+	//			GLog->Log("Icon Null 1");
+	//		}
+	//		ItemQuantity->SetText(FText::FromString(FString::FromInt(Quantity)));
+	//		ItemQuantity->SetVisibility(ESlateVisibility::Visible);
+	//	}
+	//	else
+	//	{
+	//		if (ItemIcon != nullptr)
+	//		{
+	//			ItemIcon->SetVisibility(ESlateVisibility::Hidden);
+	//		}
+	//		else
+	//		{
+	//			GLog->Log("Icon Null 2");
+	//		}
+	//		ItemQuantity->SetVisibility(ESlateVisibility::Hidden);
+	//	}
+		//for (FItemStruct* ItemStruct : ItemStructs)
+		//{
+		//	//if (ItemStruct->ItemName == ItemID)
+		//	//{
+		//		//if (ItemIcon != nullptr)
+		//		//{
+		//			ItemIcon->SetBrushFromTexture(ItemStruct->Thumbnail);
+		//			ItemIcon->SetVisibility(ESlateVisibility::Visible);
+		//			ItemQuantity->SetText(FText::FromString(FString::FromInt(Quantity)));
+		//			ItemQuantity->SetVisibility(ESlateVisibility::Visible);
+		//		//}
+		//		//else
+		//		//{
+		//		//	UE_LOG(LogTemp, Log, TEXT("Icon Null 1"));
+		//		//}
+		//		//return;
+		//	//}
+		//}
+		//if (ItemIcon != nullptr)
+		//{
+		//	ItemIcon->SetVisibility(ESlateVisibility::Hidden);
+		//	ItemQuantity->SetVisibility(ESlateVisibility::Hidden);
+		//}
+		//else
+		//{
+		//	UE_LOG(LogTemp, Log, TEXT("Icon Null 2"));
+		//}
 }
 
 void UInventoryItemSlot::NativeOnInitialized()
@@ -94,4 +132,43 @@ void UInventoryItemSlot::NativeOnDragDetected(const FGeometry& InGeometry, const
 			}
 		}
 	}*/
+}
+
+void UInventoryItemSlot::SetSlot()
+{
+	if (InventoryDataTable == nullptr)
+	{
+		UE_LOG(LogTemp, Log, TEXT("Inventory is null"));
+	}
+	else
+	{
+		//InventoryDataTable->GetAllRows<FItemStruct>(ItemID, ItemStructs);
+		FItemStruct* ItemStruct = InventoryDataTable->FindRow<FItemStruct>(FName(ItemID), "");
+		if (ItemStruct != nullptr)
+		{
+			if (ItemIcon != nullptr)
+			{
+				ItemIcon->SetBrushFromTexture(ItemStruct->Thumbnail);
+				ItemIcon->SetVisibility(ESlateVisibility::Visible);
+			}
+			else
+			{
+				GLog->Log("Icon Null 1");
+			}
+			ItemQuantity->SetText(FText::FromString(FString::FromInt(Quantity)));
+			ItemQuantity->SetVisibility(ESlateVisibility::Visible);
+		}
+		else
+		{
+			if (ItemIcon != nullptr)
+			{
+				ItemIcon->SetVisibility(ESlateVisibility::Hidden);
+			}
+			else
+			{
+				GLog->Log("Icon Null 2");
+			}
+			ItemQuantity->SetVisibility(ESlateVisibility::Hidden);
+		}
+	}
 }

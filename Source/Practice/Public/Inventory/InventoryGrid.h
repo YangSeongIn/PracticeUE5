@@ -15,13 +15,16 @@ class PRACTICE_API UInventoryGrid : public UUserWidget
 	GENERATED_BODY()
 
 protected:
-	virtual void NativePreConstruct() override;
+	virtual void NativeConstruct() override;
 
 public:
 	UPROPERTY(BlueprintReadWrite)
 		UInventorySystem* InventorySystem;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 		UWrapBox* ItemGrid;
+
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<UUserWidget> ItemSlotWidgetClass;
 
 	UFUNCTION()
 		void DisplayInventory(UInventorySystem* InventoryComp);

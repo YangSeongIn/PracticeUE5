@@ -3,8 +3,6 @@
 
 #include "Item/Weapon/Item_Base.h"
 #include "Item/ItemDataComponent.h"
-#include "Engine/DataTable.h"
-#include "Inventory/InventoryItemStruct.h"
 
 // Sets default values
 AItem_Base::AItem_Base()
@@ -30,13 +28,5 @@ void AItem_Base::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-}
-
-FName AItem_Base::GetItemName()
-{
-	FDataTableRowHandle ItemData = ItemDataComponent->ItemID;
-	FItemStruct* Item = ItemData.DataTable->FindRow<FItemStruct>(ItemData.RowName, "");
-
-	return FName(Item->ItemName);
 }
 

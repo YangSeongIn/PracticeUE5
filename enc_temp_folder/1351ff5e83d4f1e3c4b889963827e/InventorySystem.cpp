@@ -28,7 +28,7 @@ void UInventorySystem::BeginPlay()
 	// ...
 	for (int i = 0; i < inventorySize; i++) 
 	{
-		FInventorySlotStruct s{"", 0};
+		FInventorySlotStruct s{"None", 0};
 		Contents.Add(s);
 	}
 }

@@ -10,9 +10,9 @@
 #include "PracticeCharacter.h"
 #include "Kismet/GameplayStatics.h"
 
-void UInventory::NativePreConstruct()
+void UInventory::NativeConstruct()
 {
-	Super::NativePreConstruct();
+	Super::NativeConstruct();
 
 	APracticeCharacter* Character = Cast<APracticeCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0));
 	if (Character != nullptr)

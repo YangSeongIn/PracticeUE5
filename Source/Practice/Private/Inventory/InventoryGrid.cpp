@@ -9,11 +9,11 @@
 #include "PracticeCharacter.h"
 #include "Kismet/GameplayStatics.h"
 
-void UInventoryGrid::NativePreConstruct()
+void UInventoryGrid::NativeConstruct()
 {
-	Super::NativePreConstruct();
+	Super::NativeConstruct();
 
-	//UpdateInventory();
+	UpdateInventory();
 }
 
 void UInventoryGrid::DisplayInventory(UInventorySystem* InventoryComp)
@@ -25,22 +25,30 @@ void UInventoryGrid::DisplayInventory(UInventorySystem* InventoryComp)
 
 void UInventoryGrid::UpdateInventory()
 {
-	//APracticeCharacter* Character = Cast<APracticeCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0));
-	//if (Character != nullptr)
-	//{
-		//InventorySystem = Character->GetInventorySystem();
-	if (IsValid(InventorySystem))
+	APracticeCharacter* Character = Cast<APracticeCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0));
+	if (Character != nullptr)
 	{
-		UInventoryItemSlot* ItemSlot = Cast<UInventoryItemSlot>(CreateWidget(GetWorld(), UInventoryItemSlot::StaticClass()));
-		/*TArray<FInventorySlotStruct> Arr = InventorySystem->GetContents();
-		for (FInventorySlotStruct x : Arr)
+		InventorySystem = Character->GetInventorySystem();
+		if (IsValid(InventorySystem))
 		{
-			UInventoryItemSlot* ItemSlot = Cast<UInventoryItemSlot>(CreateWidget(GetWorld(), UInventoryItemSlot::StaticClass()));
-			ItemSlot->ItemID = x.ItemID;
-			ItemSlot->Quantity = x.Quantity;
-			ItemGrid->AddChildToWrapBox(ItemSlot);
-			GLog->Log("AddChild!");
-		}*/
-	}	
-	//}
+			//UInventoryItemSlot* ItemSlot = Cast<UInventoryItemSlot>(CreateWidget(GetWorld(), UInventoryItemSlot::StaticClass()));
+			if (ItemSlotWidgetClass != nullptr)
+			{
+				GLog->Log("Slot Not Null In Grid");
+				TArray<FInventorySlotStruct> Arr = InventorySystem->GetContents();
+				for (FInventorySlotStruct x : Arr)
+				{
+					UInventoryItemSlot* ItemSlot = Cast<UInventoryItemSlot>(CreateWidget(this, ItemSlotWidgetClass));
+					ItemSlot->ItemID = x.ItemID;
+					ItemSlot->Quantity = x.Quantity;
+					ItemGrid->AddChildToWrapBox(ItemSlot);
+					ItemSlot->SetSlot();
+				}
+			}
+			else
+			{
+				GLog->Log("Slot Null In Grid");
+			}
+		}	
+	}
 }
