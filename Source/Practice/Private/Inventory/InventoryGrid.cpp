@@ -9,9 +9,9 @@
 #include "PracticeCharacter.h"
 #include "Kismet/GameplayStatics.h"
 
-void UInventoryGrid::NativeConstruct()
+void UInventoryGrid::NativePreConstruct()
 {
-	Super::NativeConstruct();
+	Super::NativePreConstruct();
 
 	UpdateInventory();
 }
@@ -42,7 +42,7 @@ void UInventoryGrid::UpdateInventory()
 					ItemSlot->ItemID = x.ItemID;
 					ItemSlot->Quantity = x.Quantity;
 					ItemGrid->AddChildToWrapBox(ItemSlot);
-					ItemSlot->SetSlot();
+					//ItemSlot->SetSlot();
 				}
 			}
 			else

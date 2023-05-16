@@ -15,7 +15,7 @@ class PRACTICE_API UInventoryGrid : public UUserWidget
 	GENERATED_BODY()
 
 protected:
-	virtual void NativeConstruct() override;
+	virtual void NativePreConstruct() override;
 
 public:
 	UPROPERTY(BlueprintReadWrite)

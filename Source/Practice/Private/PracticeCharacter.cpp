@@ -13,6 +13,7 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "Item/Weapon/Item_Base.h"
 #include "Item/ItemDataComponent.h"
+#include "Inventory//InventoryGrid.h"
 
 #include "Inventory/Inventory.h"
 
@@ -152,6 +153,7 @@ void APracticeCharacter::OpenInventory(const FInputActionValue& Value)
 			if (InventoryWidget != nullptr)
 			{
 				InventoryWidget->AddToViewport();
+				InventoryWidget->InventoryGrid->DisplayInventory(InventorySystem);
 			}
 		}
 		else

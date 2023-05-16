@@ -11,6 +11,12 @@ UItemDataComponent::UItemDataComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
+	static ConstructorHelpers::FObjectFinder<UDataTable> DataTable(TEXT("/Script/Engine.DataTable'/Game/Inventory/DT_ItemDataTable.DT_ItemDataTable'"));
+	if (DataTable.Succeeded())
+	{
+		ItemID.DataTable = DataTable.Object;
+	}
+	
 	Quantity = 1;
 	// ...
 }

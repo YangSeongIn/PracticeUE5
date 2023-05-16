@@ -38,40 +38,44 @@ void UInventoryItemSlot::NativePreConstruct()
 	//	InventoryDataTable = DataTable.Object;
 	//}
 
-	//if (InventoryDataTable == nullptr)
-	//{
-	//	UE_LOG(LogTemp, Log, TEXT("Inventory is null"));
-	//}
-	//else
-	//{
-	//	//InventoryDataTable->GetAllRows<FItemStruct>(ItemID, ItemStructs);
-	//	FItemStruct* ItemStruct = InventoryDataTable->FindRow<FItemStruct>(FName(ItemID), "");
-	//	if (ItemStruct != nullptr)
-	//	{
-	//		if (ItemIcon != nullptr)
-	//		{
-	//			ItemIcon->SetBrushFromTexture(ItemStruct->Thumbnail);
-	//			ItemIcon->SetVisibility(ESlateVisibility::Visible);
-	//		}
-	//		else
-	//		{
-	//			GLog->Log("Icon Null 1");
-	//		}
-	//		ItemQuantity->SetText(FText::FromString(FString::FromInt(Quantity)));
-	//		ItemQuantity->SetVisibility(ESlateVisibility::Visible);
-	//	}
-	//	else
-	//	{
-	//		if (ItemIcon != nullptr)
-	//		{
-	//			ItemIcon->SetVisibility(ESlateVisibility::Hidden);
-	//		}
-	//		else
-	//		{
-	//			GLog->Log("Icon Null 2");
-	//		}
-	//		ItemQuantity->SetVisibility(ESlateVisibility::Hidden);
-	//	}
+	if (InventoryDataTable == nullptr)
+	{
+		UE_LOG(LogTemp, Log, TEXT("Inventory is null"));
+	}
+	else
+	{
+		//InventoryDataTable->GetAllRows<FItemStruct>(ItemID, ItemStructs);
+		FItemStruct* ItemStruct = InventoryDataTable->FindRow<FItemStruct>(FName(ItemID), "");
+		UE_LOG(LogTemp, Log, TEXT("ItemID : %s"), *ItemID);
+		if (ItemStruct != nullptr)
+		{
+			if (ItemIcon != nullptr)
+			{
+				ItemIcon->SetBrushFromTexture(ItemStruct->Thumbnail);
+				ItemIcon->SetVisibility(ESlateVisibility::Visible);
+				GLog->Log("Item is in inventory");
+			}
+			else
+			{
+				GLog->Log("Icon Null 1");
+			}
+			UE_LOG(LogTemp, Log, TEXT("Quantity Text : %s"), *FString::FromInt(Quantity));
+			ItemQuantity->SetText(FText::FromString(FString::FromInt(Quantity)));
+			ItemQuantity->SetVisibility(ESlateVisibility::Visible);
+		}
+		else
+		{
+			if (ItemIcon != nullptr)
+			{
+				ItemIcon->SetVisibility(ESlateVisibility::Hidden);
+			}
+			else
+			{
+				GLog->Log("Icon Null 2");
+			}
+			ItemQuantity->SetVisibility(ESlateVisibility::Hidden);
+		}
+	}
 		//for (FItemStruct* ItemStruct : ItemStructs)
 		//{
 		//	//if (ItemStruct->ItemName == ItemID)
