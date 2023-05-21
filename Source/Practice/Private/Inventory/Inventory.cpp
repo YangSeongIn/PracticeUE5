@@ -9,6 +9,15 @@
 #include "Components/WrapBox.h"
 #include "PracticeCharacter.h"
 #include "Kismet/GameplayStatics.h"
+#include "PracticeController.h"
+#include "Blueprint/WidgetBlueprintLibrary.h"
+
+void UInventory::NativeConstruct()
+{
+	Super::NativeConstruct();
+	UWidgetBlueprintLibrary::SetInputMode_UIOnlyEx(UGameplayStatics::GetPlayerController(this, 0), InventoryGrid);
+	UGameplayStatics::GetPlayerController(this, 0)->SetShowMouseCursor(true);
+}
 
 void UInventory::NativePreConstruct()
 {
@@ -19,5 +28,29 @@ void UInventory::NativePreConstruct()
 	{
 		InventoryGrid->DisplayInventory(Character->GetInventorySystem());
 	}
-	
+}
+
+void UInventory::NativeDestruct()
+{
+	APlayerController* Controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	if (IsValid(Controller))
+	{
+		UWidgetBlueprintLibrary::SetInputMode_GameOnly(Controller);
+		Controller->SetShowMouseCursor(false);
+		APracticeCharacter* Character = Cast<APracticeCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+		if (Character != nullptr)
+		{
+			Character->SetInventoryWidgetNull();
+		}
+	}
+	Super::NativeDestruct();
+}
+
+FReply UInventory::NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent)
+{
+	if (InKeyEvent.GetKey() == EKeys::I)
+	{
+		RemoveFromParent();
+	}
+	return FReply::Handled();
 }

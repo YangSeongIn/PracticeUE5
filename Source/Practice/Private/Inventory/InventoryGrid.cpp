@@ -41,6 +41,8 @@ void UInventoryGrid::UpdateInventory()
 					UInventoryItemSlot* ItemSlot = Cast<UInventoryItemSlot>(CreateWidget(this, ItemSlotWidgetClass));
 					ItemSlot->ItemID = x.ItemID;
 					ItemSlot->Quantity = x.Quantity;
+					ItemSlot->InventorySystem = InventorySystem;
+					ItemSlot->ContentIndex = ItemSlot->ContentIndex;
 					ItemGrid->AddChildToWrapBox(ItemSlot);
 					//ItemSlot->SetSlot();
 				}

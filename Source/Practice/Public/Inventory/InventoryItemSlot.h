@@ -24,6 +24,7 @@ public:
 	// UInventoryItemSlot(const FObjectInitializer& ObjectInitializer);
 
 public:
+	int ContentIndex;
 	/*UPROPERTY(BlueprintReadOnly, Category = "Drag Item Visual", meta = (BindWidget))
 		UItemBase* ItemReference;*/
 	UPROPERTY(BlueprintReadOnly, Category = "Drag Item Visual", meta = (BindWidget))

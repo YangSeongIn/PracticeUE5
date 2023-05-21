@@ -147,21 +147,18 @@ void APracticeCharacter::OpenInventory(const FInputActionValue& Value)
 {
 	if (InventoryWidgetClass != nullptr)
 	{
-		if (InventoryWidget == nullptr)
+		if (InventoryWidget != nullptr)
+		{
+			InventoryWidget->RemoveFromParent();
+			InventoryWidget = nullptr;
+		}
+		else
 		{
 			InventoryWidget = Cast<UInventory>(CreateWidget(GetWorld(), InventoryWidgetClass));
 			if (InventoryWidget != nullptr)
 			{
-				InventoryWidget->AddToViewport();
 				InventoryWidget->InventoryGrid->DisplayInventory(InventorySystem);
-			}
-		}
-		else
-		{
-			if (InventoryWidget->IsInViewport())
-			{
-				InventoryWidget->RemoveFromParent();
-				InventoryWidget = nullptr;
+				InventoryWidget->AddToViewport();
 			}
 		}
 	}
@@ -170,10 +167,12 @@ void APracticeCharacter::OpenInventory(const FInputActionValue& Value)
 void APracticeCharacter::Interact()
 {
 	FVector StartLoc = GetActorLocation();
-	FVector EndLoc = StartLoc + GetActorForwardVector() * 150;
+	FVector EndLoc = StartLoc - GetActorUpVector() * 100;
+	FVector BoxHalfVec = FVector(60, 60, 0);
+	FRotator BoxRotation = FRotator(0);
 	TArray<AActor*> ArrToIgnore;
 	FHitResult OutHit;
-	bool b = UKismetSystemLibrary::LineTraceSingle(this, StartLoc, EndLoc, ETraceTypeQuery::TraceTypeQuery1,
+	bool b = UKismetSystemLibrary::BoxTraceSingle(this, StartLoc, EndLoc, BoxHalfVec, BoxRotation, ETraceTypeQuery::TraceTypeQuery1,
 		false, ArrToIgnore, EDrawDebugTrace::Persistent, OutHit, true);
 	if (b)
 	{

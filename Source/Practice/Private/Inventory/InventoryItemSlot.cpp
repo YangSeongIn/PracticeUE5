@@ -43,7 +43,7 @@ void UInventoryItemSlot::NativePreConstruct()
 		UE_LOG(LogTemp, Log, TEXT("Inventory is null"));
 	}
 	else
-	{
+	{ 
 		//InventoryDataTable->GetAllRows<FItemStruct>(ItemID, ItemStructs);
 		FItemStruct* ItemStruct = InventoryDataTable->FindRow<FItemStruct>(FName(ItemID), "");
 		UE_LOG(LogTemp, Log, TEXT("ItemID : %s"), *ItemID);
@@ -76,33 +76,6 @@ void UInventoryItemSlot::NativePreConstruct()
 			ItemQuantity->SetVisibility(ESlateVisibility::Hidden);
 		}
 	}
-		//for (FItemStruct* ItemStruct : ItemStructs)
-		//{
-		//	//if (ItemStruct->ItemName == ItemID)
-		//	//{
-		//		//if (ItemIcon != nullptr)
-		//		//{
-		//			ItemIcon->SetBrushFromTexture(ItemStruct->Thumbnail);
-		//			ItemIcon->SetVisibility(ESlateVisibility::Visible);
-		//			ItemQuantity->SetText(FText::FromString(FString::FromInt(Quantity)));
-		//			ItemQuantity->SetVisibility(ESlateVisibility::Visible);
-		//		//}
-		//		//else
-		//		//{
-		//		//	UE_LOG(LogTemp, Log, TEXT("Icon Null 1"));
-		//		//}
-		//		//return;
-		//	//}
-		//}
-		//if (ItemIcon != nullptr)
-		//{
-		//	ItemIcon->SetVisibility(ESlateVisibility::Hidden);
-		//	ItemQuantity->SetVisibility(ESlateVisibility::Hidden);
-		//}
-		//else
-		//{
-		//	UE_LOG(LogTemp, Log, TEXT("Icon Null 2"));
-		//}
 }
 
 void UInventoryItemSlot::NativeOnInitialized()
@@ -114,9 +87,9 @@ FReply UInventoryItemSlot::NativeOnPreviewMouseButtonDown(const FGeometry& InGeo
 {
 	FReply Reply = Super::NativeOnPreviewMouseButtonDown(InGeometry, InMouseEvent);
 	if (ItemID == "") return FReply::Unhandled();
-	if (InMouseEvent.IsMouseButtonDown("LeftMouseButton"))
+	if (InMouseEvent.IsMouseButtonDown(EKeys::LeftMouseButton))
 	{
-		//UWidgetBlueprintLibrary::DetectDragIfPressed();
+		return UWidgetBlueprintLibrary::DetectDragIfPressed(InMouseEvent, this, EKeys::LeftMouseButton).NativeReply;
 	}
 	return Reply;
 }
@@ -124,18 +97,25 @@ FReply UInventoryItemSlot::NativeOnPreviewMouseButtonDown(const FGeometry& InGeo
 void UInventoryItemSlot::NativeOnDragDetected(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent, UDragDropOperation*& OutOperation)
 {
 	Super::NativeOnDragDetected(InGeometry, InMouseEvent, OutOperation);
-	/*if (DragItemVisualClass != nullptr)
+	if (DragItemVisualClass != nullptr)
 	{
+		GLog->Log("Drag Detect! 1");
 		DragItemVisual = Cast<UDragItemVisual>(CreateWidget(this, DragItemVisualClass));
-		if (DragItemVisual != nullptr && DragDropOperationClass)
+		if (DragItemVisual != nullptr)
 		{
-			DragDropOperation = Cast<UItemDragDropOperation>(UWidgetBlueprintLibrary::CreateDragDropOperation(DragDropOperationClass));
+			GLog->Log("Drag Detect! 2");
+			DragItemVisual->ItemID = ItemID;
+			DragDropOperation = Cast<UItemDragDropOperation>(UWidgetBlueprintLibrary::CreateDragDropOperation(UItemDragDropOperation::StaticClass()));
 			if (DragDropOperation != nullptr)
 			{
-
+				GLog->Log("Drag Detect! 3");
+				DragDropOperation->SetInventoryComponent(InventorySystem);
+				DragDropOperation->SetContentIndex(ContentIndex);
+				DragDropOperation->DefaultDragVisual = DragItemVisual;
 			}
 		}
-	}*/
+	}
+	OutOperation = DragDropOperation;
 }
 
 void UInventoryItemSlot::SetSlot()

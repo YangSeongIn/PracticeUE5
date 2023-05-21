@@ -17,8 +17,9 @@ class APracticeCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
-		/** Camera boom positioning the camera behind the character */
-		UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+private:
+	/** Camera boom positioning the camera behind the character */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 		class USpringArmComponent* CameraBoom;
 
 	/** Follow camera */
@@ -92,7 +93,8 @@ public:
 	FORCEINLINE EPlayerState GetPlayerState() { return PlayerStateType; };
 	FORCEINLINE void SetPlayerState(uint8 i) { PlayerStateType = EPlayerState(i); };
 	FORCEINLINE UInventorySystem* GetInventorySystem() { return InventorySystem; };
-
+	FORCEINLINE UInventory* GetInventoryWidget() { return InventoryWidget; };
+	FORCEINLINE void SetInventoryWidgetNull() { InventoryWidget = nullptr; };
 
 	void SwitchCurrentWeapon(int i);
 };

@@ -6,9 +6,8 @@
 #include "Blueprint/UserWidget.h"
 #include "DragItemVisual.generated.h"
 
-class UBorder;
 class UImage;
-class UTextBlock;
+class UDataTable;
 
 UCLASS()
 class PRACTICE_API UDragItemVisual : public UUserWidget
@@ -17,15 +16,14 @@ class PRACTICE_API UDragItemVisual : public UUserWidget
 	
 public:
 	UPROPERTY(BlueprintReadOnly, Category = "Drag Item Visual", meta = (BindWidget))
-	UBorder* ItemBorder;
+		UImage* ItemIcon;
+	FString ItemID;
+	UPROPERTY(EditAnywhere)
+		UDataTable* InventoryDataTable;
 
-	UPROPERTY(BlueprintReadOnly, Category = "Drag Item Visual", meta = (BindWidget))
-	UImage* ItemIcon;
-
-	UPROPERTY(BlueprintReadOnly, Category = "Drag Item Visual", meta = (BindWidget))
-	UTextBlock* AmmoQuantity;
-
-	//virtual void NativeConstruct() override;
+protected:
+	virtual void NativePreConstruct() override;
+	virtual void NativeConstruct() override;
 	//virtual void NativeOnInitialized() override;
 	//virtual FEventReply OnMouseButtonDown(FGeometry MyGeometry, const FPointerEvent& MouseEvent) override;
 	//virtual FEventReply OnPreviewMouseButtonDown(FGeometry MyGeometry, const FPointerEvent& MouseEvent) override;
