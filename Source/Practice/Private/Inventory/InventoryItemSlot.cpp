@@ -9,6 +9,7 @@
 #include "Engine/DataTable.h"
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
+#include "Inventory/InventorySystem.h"
 
 //UInventoryItemSlot::UInventoryItemSlot(const FObjectInitializer& ObjectInitializer)
 //	:Super(ObjectInitializer)
@@ -99,16 +100,13 @@ void UInventoryItemSlot::NativeOnDragDetected(const FGeometry& InGeometry, const
 	Super::NativeOnDragDetected(InGeometry, InMouseEvent, OutOperation);
 	if (DragItemVisualClass != nullptr)
 	{
-		GLog->Log("Drag Detect! 1");
 		DragItemVisual = Cast<UDragItemVisual>(CreateWidget(this, DragItemVisualClass));
 		if (DragItemVisual != nullptr)
 		{
-			GLog->Log("Drag Detect! 2");
 			DragItemVisual->ItemID = ItemID;
 			DragDropOperation = Cast<UItemDragDropOperation>(UWidgetBlueprintLibrary::CreateDragDropOperation(UItemDragDropOperation::StaticClass()));
 			if (DragDropOperation != nullptr)
 			{
-				GLog->Log("Drag Detect! 3");
 				DragDropOperation->SetInventoryComponent(InventorySystem);
 				DragDropOperation->SetContentIndex(ContentIndex);
 				DragDropOperation->DefaultDragVisual = DragItemVisual;
@@ -116,6 +114,28 @@ void UInventoryItemSlot::NativeOnDragDetected(const FGeometry& InGeometry, const
 		}
 	}
 	OutOperation = DragDropOperation;
+}
+
+bool UInventoryItemSlot::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation)
+{
+	UItemDragDropOperation* DDO = Cast<UItemDragDropOperation>(InOperation);
+	if (DDO != nullptr)
+	{
+		if (DDO->GetContentIndex() != ContentIndex || DDO->GetInventoryComponent() != InventorySystem)
+		{
+			GLog->Log("Drop success!");
+			InventorySystem->ServerTransferSlots(DDO->GetContentIndex(), DDO->GetInventoryComponent(), ContentIndex);
+		}
+		else
+		{
+			GLog->Log("Drop fail!");
+		}
+	}
+	else
+	{
+		GLog->Log("Drop null!");
+	}
+	return false;
 }
 
 void UInventoryItemSlot::SetSlot()
@@ -126,7 +146,6 @@ void UInventoryItemSlot::SetSlot()
 	}
 	else
 	{
-		//InventoryDataTable->GetAllRows<FItemStruct>(ItemID, ItemStructs);
 		FItemStruct* ItemStruct = InventoryDataTable->FindRow<FItemStruct>(FName(ItemID), "");
 		if (ItemStruct != nullptr)
 		{

@@ -34,23 +34,24 @@ void UInventoryGrid::UpdateInventory()
 			//UInventoryItemSlot* ItemSlot = Cast<UInventoryItemSlot>(CreateWidget(GetWorld(), UInventoryItemSlot::StaticClass()));
 			if (ItemSlotWidgetClass != nullptr)
 			{
-				GLog->Log("Slot Not Null In Grid");
 				TArray<FInventorySlotStruct> Arr = InventorySystem->GetContents();
-				for (FInventorySlotStruct x : Arr)
+				for (int i = 0; i < Arr.Num(); i++)
 				{
 					UInventoryItemSlot* ItemSlot = Cast<UInventoryItemSlot>(CreateWidget(this, ItemSlotWidgetClass));
-					ItemSlot->ItemID = x.ItemID;
-					ItemSlot->Quantity = x.Quantity;
+					ItemSlot->ItemID = Arr[i].ItemID;
+					ItemSlot->Quantity = Arr[i].Quantity;
 					ItemSlot->InventorySystem = InventorySystem;
-					ItemSlot->ContentIndex = ItemSlot->ContentIndex;
+					ItemSlot->ContentIndex = i;
 					ItemGrid->AddChildToWrapBox(ItemSlot);
-					//ItemSlot->SetSlot();
 				}
-			}
-			else
-			{
-				GLog->Log("Slot Null In Grid");
+				InventorySystem->OnInventoryUpdate.AddUFunction(this, FName("UpdatedInventory"));
 			}
 		}	
 	}
+}
+
+void UInventoryGrid::UpdatedInventory()
+{
+	ItemGrid->ClearChildren();
+	UpdateInventory();
 }

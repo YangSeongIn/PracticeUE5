@@ -158,6 +158,33 @@ void UInventorySystem::DEBUGPrintContents()
 	}
 }
 
+void UInventorySystem::TransferSlots(int SourceIndex, UInventorySystem* SourceInventory, int TargetIndex)
+{
+	FInventorySlotStruct LocalSlotContent = SourceInventory->Contents[SourceIndex];
+	if (TargetIndex >= 0) 
+	{
+		if (Contents[TargetIndex].ItemID != LocalSlotContent.ItemID)
+		{
+			SourceInventory->Contents[SourceIndex] = Contents[TargetIndex];
+			Contents[TargetIndex] = LocalSlotContent;
+			MulticastUpdate();
+		}
+	}
+}
+
+void UInventorySystem::MulticastUpdate()
+{
+	if (OnInventoryUpdate.IsBound())
+	{
+		OnInventoryUpdate.Broadcast();
+	}
+}
+
+void UInventorySystem::ServerTransferSlots(int SourceIndex, UInventorySystem* SourceInventory, int TargetIndex)
+{
+	TransferSlots(SourceIndex, SourceInventory, TargetIndex);
+}
+
 void UInventorySystem::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);

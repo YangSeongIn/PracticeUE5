@@ -30,5 +30,7 @@ public:
 		void DisplayInventory(UInventorySystem* InventoryComp);
 	UFUNCTION()
 		void UpdateInventory();
+	UFUNCTION()
+		void UpdatedInventory();
 
 };

@@ -9,6 +9,8 @@
 
 class UDataTable;
 
+DECLARE_MULTICAST_DELEGATE(FOnInventoryUpdate);
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class UInventorySystem : public UActorComponent
 {
@@ -35,6 +37,7 @@ public:
 	int inventorySize = 16;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Replicated)
 	TArray<FInventorySlotStruct> Contents;
+	FOnInventoryUpdate OnInventoryUpdate;
 
 	TTuple<bool, int> AddToInventory(FString ItemID, int Quantity);
 	void RemoveFromInventory(FString ItemID, int Quantity);
@@ -43,10 +46,16 @@ public:
 	void AddToStack(int Idx, int Quantity);
 	TTuple<bool, int> AnyEmptySlotAvailable();
 	bool CreateNewStack(FString ItemID, int Quantity);
+	void TransferSlots(int SourceIndex, UInventorySystem* SourceInventory, int TargetIndex);
+	UFUNCTION()
+		void MulticastUpdate();
+	UFUNCTION()
+		void ServerTransferSlots(int SourceIndex, UInventorySystem* SourceInventory, int TargetIndex);
 	UFUNCTION(BlueprintCallable)
 		void DEBUGPrintContents();
 	UFUNCTION(BlueprintCallable)
-	TArray<FInventorySlotStruct> GetContents() { return Contents; };
+		TArray<FInventorySlotStruct> GetContents() { return Contents; };
 
+protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 };
