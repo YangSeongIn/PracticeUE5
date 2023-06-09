@@ -145,7 +145,7 @@ bool UInventorySystem::CreateNewStack(FString ItemID, int Quantity)
 
 void UInventorySystem::DEBUGPrintContents()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Blue, FString::Printf(TEXT("contents size : %d"), Contents.Num()));
+	/*GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Blue, FString::Printf(TEXT("contents size : %d"), Contents.Num()));
 	for (int i = 0; i < Contents.Num(); i++)
 	{
 		FInventorySlotStruct x = Contents[i];
@@ -155,7 +155,7 @@ void UInventorySystem::DEBUGPrintContents()
 			FColor::Blue,
 			FString::Printf(TEXT("%d : %s, %d"), i, *x.ItemID, x.Quantity)
 		);
-	}
+	}*/
 }
 
 void UInventorySystem::TransferSlots(int SourceIndex, UInventorySystem* SourceInventory, int TargetIndex)

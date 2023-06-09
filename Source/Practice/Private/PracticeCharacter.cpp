@@ -11,6 +11,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "Inventory/InventorySystem.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Kismet/GameplayStatics.h"
 #include "Item/Weapon/Item_Base.h"
 #include "Item/ItemDataComponent.h"
 #include "Inventory//InventoryGrid.h"
@@ -77,8 +78,32 @@ void APracticeCharacter::BeginPlay()
 	PlayerStateType = EPlayerState::BareHandsMode;
 }
 
+void APracticeCharacter::OpenLobby()
+{
+	UWorld* World = GetWorld();
+	if (World != nullptr)
+	{
+		World->ServerTravel("/Game/ThirdPerson/Maps/Lobby?listen");
+	}
+}
+
+void APracticeCharacter::CallOpenLevel(const FString& Address)
+{
+	UGameplayStatics::OpenLevel(this, *Address);
+}
+
+void APracticeCharacter::CallClientTravel(const FString& Address)
+{
+	APlayerController* PlayerController = GetGameInstance()->GetFirstLocalPlayerController();
+	if (PlayerController != nullptr)
+	{
+		PlayerController->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
+	}
+}
+
 void APracticeCharacter::SwitchCurrentWeapon(int i)
 {
+
 }
 
 //////////////////////////////////////////////////////////////////////////
